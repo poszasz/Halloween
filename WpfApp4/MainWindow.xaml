@@ -1,0 +1,19 @@
+﻿<Window x:Class="WpfApp4.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp4" Icon="/images/icon.ico" WindowState="Maximized"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Images/hatter.png"/>
+        </Grid.Background>
+        <StackPanel Width="300">
+            <Image Source="/Images/sima_tokfej.png"  RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+            <Button Name="jatekIndiasa" Background="OrangeRed" FontFamily="monocraft" FontSize="20" Foreground="Yellow" BorderBrush="Yellow" BorderThickness="4" Padding="10" Margin="0 10 0 10" FontWeight="Black" Content="Játék indítása"/>
+            <Button Name="eredmenyek" Background="OrangeRed" FontFamily="monocraft" FontSize="20" Foreground="Yellow" BorderBrush="Yellow" BorderThickness="4" Padding="10" Margin="0 10 0 10" FontWeight="Black" Content="Eredmények"/>
+        </StackPanel>
+    </Grid>
+</Window>
