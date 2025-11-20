@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,21 +12,22 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using WpfApp4.Models;
 using WpfApp4.Networking;
 
 namespace WpfApp4
 {
-    /// <summary>
-    /// Interaction logic for Game.xaml
-    /// </summary>
+    
     public partial class Game : Window
     {
         Stopwatch stopwatch = new Stopwatch();
-        double jatekIdo = 20;
+        double jatekIdo = 60;
         Jatek jatek = new Jatek();
         int osszpont = 0;
         bool jatekVege = false;
+        bool cheatAktiv = false;
+        DispatcherTimer cheatTimer = new DispatcherTimer();
         public Game(Jatek jatek)
         {
             InitializeComponent();
@@ -37,6 +38,33 @@ namespace WpfApp4
             stopwatch.Start();
             tarolo.Children.OfType<Image>().ToList().ForEach(x => x.MouseDown += X_MouseDown);
             CompositionTarget.Rendering += (_, __) => KepernyoFrissites();
+
+            cheatTimer.Interval = TimeSpan.FromSeconds(3);
+            cheatTimer.Tick += (s, e) => {
+                cheatIndicator.Text = "";
+                cheatTimer.Stop();
+            };
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.B && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                cheatAktiv = !cheatAktiv;
+
+                if (cheatAktiv)
+                {
+                    cheatIndicator.Text = "BAROSS CHEAT AKTÍV";
+                    cheatTimer.Stop();
+                    cheatTimer.Start();
+                }
+                else
+                {
+                    cheatIndicator.Text = "BAROSS CHEAT INAKTÍV";
+                    cheatTimer.Stop();
+                    cheatTimer.Start();
+                }
+            }
         }
 
         private void X_MouseDown(object sender, MouseButtonEventArgs e)
@@ -88,6 +116,18 @@ namespace WpfApp4
             foreach (var img in tokfejek)
             {
                 img.Source = new BitmapImage(new Uri("Images/sima_tokfej.png", UriKind.Relative));
+            }
+            if (cheatAktiv)
+            {
+                foreach (var esemeny in jatek.Esemenyek.Where(x => x.NyitasIdo - 1.0 <= ido && ido < x.ZarasIdo))
+                {
+                   
+                    if (ido >= esemeny.NyitasIdo - 1.0 && ido < esemeny.NyitasIdo)
+                    {
+                        Image img = tokfejek[esemeny.TokAzon];
+                        img.Source = new BitmapImage(new Uri($"Images/cheat_tokfej.png", UriKind.Relative));
+                    }
+                }
             }
             foreach (var esemeny in jatek.Esemenyek.Where(x=> x.NyitasIdo<=ido && ido<x.ZarasIdo))
             {
